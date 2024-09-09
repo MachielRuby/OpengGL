@@ -11,7 +11,7 @@ class Shader{
 
     void begin();//使用
     void end();//结束使用
-    
+
     void setBool(const char* name, bool value) const;
     void setInt(const char* name, int value) const;
     void setFloat(const char* name, float value) const;
@@ -21,6 +21,8 @@ class Shader{
 
     private:
     GLuint mProgram{0};
+
+    void checkShaderErrors(GLuint shader,std::string type);
 };
 
 #endif
