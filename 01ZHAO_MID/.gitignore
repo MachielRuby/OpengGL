@@ -5,6 +5,5 @@ include
 lib
 glad.c
 source/application
-source/glframework
 source/utils
 source/main.cpp
