@@ -16,8 +16,7 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
     std::ifstream fShaderFile;
 
     vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-    fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-
+    wcas
    
 }
 Shader::~Shader()
@@ -31,5 +30,5 @@ void Shader::begin()//使用
 }
 void Shader::end()//结束使用
 {
-    
+
 }
