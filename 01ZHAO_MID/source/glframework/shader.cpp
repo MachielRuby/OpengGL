@@ -20,7 +20,16 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 
    
 }
-~Shader();
+Shader::~Shader()
+{
 
-void begin();//使用
-void end();//结束使用
+}
+
+void Shader::begin()//使用
+{
+    
+}
+void Shader::end()//结束使用
+{
+    
+}
