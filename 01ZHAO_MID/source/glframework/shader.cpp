@@ -111,3 +111,53 @@ void Shader::checkShaderErrors(GLuint target, std::string type) {
 		std::cout << "Error: Check shader errors Type is wrong" << std::endl;
 	}
 }
+
+void Shader::setBool(const char* name, bool value) const
+{
+	
+}
+void Shader::setInt(const char* name, int value) const
+{
+	GLuint location = glGetUniformLocation(mProgram, name);
+	glUniform1i(location, value);
+}
+void Shader::setFloat(const char* name, float value) const
+{
+	GLuint location = glGetUniformLocation(mProgram, name);
+	glUniform1f(location, value);
+}
+void Shader::setVec2(const char* name, float x, float y) const
+{
+	GLuint location = glGetUniformLocation(mProgram, name);
+	glUniform2f(location, x, y);
+}
+void Shader::setVec3(const char* name, float x, float y, float z) const
+{
+	GLuint location = glGetUniformLocation(mProgram, name);
+	glUniform3f(location, x, y, z);
+}
+
+void Shader::setVec3(const char* name, const glm::vec3& vec) const
+{
+	GLuint location = glGetUniformLocation(mProgram, name);
+	glUniform3fv(location, 1, glm::value_ptr(vec));
+}
+
+
+void Shader::setVec4(const char* name, float x, float y, float z, float w) const
+{
+	GLuint location = glGetUniformLocation(mProgram, name);
+	glUniform4f(location, x, y, z, w);
+}
+
+void Shader::setMat4(const char* name, const glm::mat4& mat) const
+{
+	GLuint location = glGetUniformLocation(mProgram, name);
+	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(mat));
+}
+void Shader::setMat3(const char* name, const glm::mat3& mat) const
+{
+	GLuint location = glGetUniformLocation(mProgram, name);
+	glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(mat));
+}
+

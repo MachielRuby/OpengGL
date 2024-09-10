@@ -5,7 +5,7 @@
 class Texture
 {
     public:
-    Texture(const std::string&path,unsigned int unit);
+    Texture(const std::string&path,unsigned int unit = 0);
     ~Texture();
 
     void bind();
