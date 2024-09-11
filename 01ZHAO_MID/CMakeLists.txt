@@ -25,6 +25,10 @@ add_executable(OpenGL01 "./source/main.cpp" "./source/utils/log.cpp" "./glad.c")
 #  "glad.c"
 include_directories(OpenGL01 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include/spdlog)
 
-target_link_libraries(OpenGL01 glfw3.lib app)
+target_link_libraries(OpenGL01 glfw3.lib app fw wrapper)
 
 add_subdirectory(source/application)
+add_subdirectory(source/glframework)
+add_subdirectory(source/wrapper)
+
+# uniform 不能改变 相当于const 哟西

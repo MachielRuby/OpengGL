@@ -10,6 +10,7 @@ class Geometry
 
     static Geometry*createBox(float size);
     static Geometry*createSphere(float radius);
+	static Geometry* createPlane(float width, float height);
 
 
     GLuint getVao() const { return mVao; }
@@ -24,3 +25,4 @@ class Geometry
     uint32_t mIndicesCount{0};
 
 };
+
