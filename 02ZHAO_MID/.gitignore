@@ -1,0 +1,9 @@
+build
+.vscode
+.cache
+include
+lib
+glad.c
+source/application
+source/utils
+source/main.cpp
