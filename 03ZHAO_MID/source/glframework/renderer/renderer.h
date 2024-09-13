@@ -17,12 +17,19 @@ class Renderer
     ~Renderer();
 
     //每次调用都会熏染
-    void render(
-        const std::vector<Mesh*>& meshes,
+    void render
+    (
+        Scene*scene,
         Camera*camera,
-        const std::vector<PointLight*>&pointLights,
         DirectionalLight*dirLight,
-        SpotLight*spotLight,
+        AmbientLight*ambLight
+    );
+    //针对单个object渲染
+    void renderObject
+    (
+        Object*object,
+        Camera*camera,
+        DirectionalLight*dirLight,
         AmbientLight*ambLight
     );
 

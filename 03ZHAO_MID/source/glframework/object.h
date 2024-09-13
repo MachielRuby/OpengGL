@@ -1,6 +1,5 @@
 #pragma once
 #include "core.h"
-#include <urlmon.h>
 #include<vector>
 
 enum class ObjectType{
@@ -47,5 +46,5 @@ class Object
     std::vector<Object*> mChildren{};
     Object* mParent{nullptr};
     //类型记录
-    ObjectType mType{ObjectType::Object};
+    ObjectType mType{};
 };

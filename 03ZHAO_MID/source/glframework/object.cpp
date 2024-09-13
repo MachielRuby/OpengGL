@@ -4,6 +4,7 @@
 #include <iostream>
 Object::Object()
 {
+	mType = ObjectType::Object;
 
 }
 Object::~Object()

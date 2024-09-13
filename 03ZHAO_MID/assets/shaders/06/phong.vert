@@ -13,17 +13,17 @@ uniform mat4 projectionMatrix;
 
 uniform mat3 normalMatrix;
 
-//aPosä½œä¸ºattributeï¼ˆå±æ€§ï¼‰ä¼ å…¥shader
-//ä¸å…è®¸æ›´æ”¹çš„
+//aPos×÷Îªattribute£¨ÊôĞÔ£©´«Èëshader
+//²»ÔÊĞí¸ü¸ÄµÄ
 void main()
 {
-// å°†è¾“å…¥çš„é¡¶ç‚¹ä½ç½®ï¼Œè½¬åŒ–ä¸ºé½æ¬¡åæ ‡ï¼ˆ3ç»´-4ç»´ï¼‰
+// ½«ÊäÈëµÄ¶¥µãÎ»ÖÃ£¬×ª»¯ÎªÆë´Î×ø±ê£¨3Î¬-4Î¬£©
 	vec4 transformPosition = vec4(aPos, 1.0);
 
-	//åšä¸€ä¸ªä¸­é—´å˜é‡TransformPositionï¼Œç”¨äºè®¡ç®—å››ä½ä½ç½®ä¸modelMatrixç›¸ä¹˜çš„ä¸­é—´ç»“æœ
+	//×öÒ»¸öÖĞ¼ä±äÁ¿TransformPosition£¬ÓÃÓÚ¼ÆËãËÄÎ»Î»ÖÃÓëmodelMatrixÏà³ËµÄÖĞ¼ä½á¹û
 	transformPosition = modelMatrix * transformPosition;
 
-	//è®¡ç®—å½“å‰é¡¶ç‚¹çš„worldPositionï¼Œå¹¶ä¸”å‘åä¼ è¾“ç»™FragmentShader
+	//¼ÆËãµ±Ç°¶¥µãµÄworldPosition£¬²¢ÇÒÏòºó´«Êä¸øFragmentShader
 	worldPosition = transformPosition.xyz;
 
 	gl_Position = projectionMatrix * viewMatrix * transformPosition;

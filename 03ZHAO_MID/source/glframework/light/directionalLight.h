@@ -7,5 +7,5 @@ class DirectionalLight:public Light{
     ~DirectionalLight();
 
     public:
-    glm::vec3 mDirection{1.0f};
+    glm::vec3 mDirection{-1.0f};
 };

@@ -5,12 +5,12 @@ in vec2 uv;
 in vec3 normal;
 in vec3 worldPosition;
 
-uniform sampler2D sampler;	//diffuseè´´å›¾é‡‡æ ·å™¨
-uniform sampler2D specularMaskSampler;//specularMaskè´´å›¾é‡‡æ ·å™¨
+uniform sampler2D sampler;	//diffuseÌùÍ¼²ÉÑùÆ÷
+uniform sampler2D specularMaskSampler;//specularMaskÌùÍ¼²ÉÑùÆ÷
 
 uniform vec3 ambientColor;
 
-//ç›¸æœºä¸–ç•Œä½ç½®
+//Ïà»úÊÀ½çÎ»ÖÃ
 uniform vec3 cameraPosition;
 
 
@@ -29,7 +29,7 @@ struct PointLight{
 
 	float k2;
 	float k1;
-	float k0;
+	float kc;
 };
 
 struct SpotLight{
@@ -41,14 +41,9 @@ struct SpotLight{
 	float specularIntensity;
 };
 
-uniform SpotLight spotLight;
 uniform DirectionalLight directionalLight;
 
-//å®å®šä¹‰
-#define POINT_LIGHT_NUM 4
-uniform PointLight pointLights[POINT_LIGHT_NUM];
-
-//è®¡ç®—æ¼«åå°„å…‰ç…§
+//¼ÆËãÂş·´Éä¹âÕÕ
 vec3 calculateDiffuse(vec3 lightColor, vec3 objectColor, vec3 lightDir, vec3 normal){
 	float diffuse = clamp(dot(-lightDir, normal), 0.0,1.0);
 	vec3 diffuseColor = lightColor * diffuse * objectColor;
@@ -56,9 +51,9 @@ vec3 calculateDiffuse(vec3 lightColor, vec3 objectColor, vec3 lightDir, vec3 nor
 	return diffuseColor;
 }
 
-//è®¡ç®—é•œé¢åå°„å…‰ç…§
+//¼ÆËã¾µÃæ·´Éä¹âÕÕ
 vec3 calculateSpecular(vec3 lightColor, vec3 lightDir, vec3 normal, vec3 viewDir, float intensity){
-	//1 é˜²æ­¢èƒŒé¢å…‰æ•ˆæœ
+	//1 ·ÀÖ¹±³Ãæ¹âĞ§¹û
 	float dotResult = dot(-lightDir, normal);
 	float flag = step(0.0, dotResult);
 	vec3 lightReflect = normalize(reflect(lightDir,normal));
@@ -66,63 +61,63 @@ vec3 calculateSpecular(vec3 lightColor, vec3 lightDir, vec3 normal, vec3 viewDir
 	//2 jisuan specular
 	float specular = max(dot(lightReflect,-viewDir), 0.0);
 
-	//3 æ§åˆ¶å…‰æ–‘å¤§å°
+	//3 ¿ØÖÆ¹â°ß´óĞ¡
 	specular = pow(specular, shiness);
 
 	//float specularMask = texture(specularMaskSampler, uv).r;
 
-	//4 è®¡ç®—æœ€ç»ˆé¢œè‰²
+	//4 ¼ÆËã×îÖÕÑÕÉ«
 	vec3 specularColor = lightColor * specular * flag * intensity;
 
 	return specularColor;
 }
 
 vec3 calculateSpotLight(SpotLight light, vec3 normal, vec3 viewDir){
-	//è®¡ç®—å…‰ç…§çš„é€šç”¨æ•°æ®
+	//¼ÆËã¹âÕÕµÄÍ¨ÓÃÊı¾İ
 	vec3 objectColor  = texture(sampler, uv).xyz;
 	vec3 lightDir = normalize(worldPosition - light.position);
 	vec3 targetDir = normalize(light.targetDirection);
 
-	//è®¡ç®—spotlightçš„ç…§å°„èŒƒå›´
+	//¼ÆËãspotlightµÄÕÕÉä·¶Î§
 	float cGamma = dot(lightDir, targetDir);
 	float intensity =clamp( (cGamma - light.outerLine) / (light.innerLine - light.outerLine), 0.0, 1.0);
 
-	//1 è®¡ç®—diffuse
+	//1 ¼ÆËãdiffuse
 	vec3 diffuseColor = calculateDiffuse(light.color,objectColor, lightDir,normal);
 
-	//2 è®¡ç®—specular
+	//2 ¼ÆËãspecular
 	vec3 specularColor = calculateSpecular(light.color, lightDir,normal, viewDir,light.specularIntensity); 
 
 	return (diffuseColor + specularColor)*intensity;
 }
 
 vec3 calculateDirectionalLight(DirectionalLight light, vec3 normal ,vec3 viewDir){
-	//è®¡ç®—å…‰ç…§çš„é€šç”¨æ•°æ®
+	//¼ÆËã¹âÕÕµÄÍ¨ÓÃÊı¾İ
 	vec3 objectColor  = texture(sampler, uv).xyz;
 	vec3 lightDir = normalize(light.direction);
 
-	//1 è®¡ç®—diffuse
+	//1 ¼ÆËãdiffuse
 	vec3 diffuseColor = calculateDiffuse(light.color,objectColor, lightDir,normal);
 
-	//2 è®¡ç®—specular
+	//2 ¼ÆËãspecular
 	vec3 specularColor = calculateSpecular(light.color, lightDir,normal, viewDir,light.specularIntensity); 
 
 	return diffuseColor + specularColor;
 }
 
 vec3 calculatePointLight(PointLight light, vec3 normal ,vec3 viewDir){
-	//è®¡ç®—å…‰ç…§çš„é€šç”¨æ•°æ®
+	//¼ÆËã¹âÕÕµÄÍ¨ÓÃÊı¾İ
 	vec3 objectColor  = texture(sampler, uv).xyz;
 	vec3 lightDir = normalize(worldPosition - light.position);
 
-	//è®¡ç®—è¡°å‡
+	//¼ÆËãË¥¼õ
 	float dist = length(worldPosition - light.position);
-	float attenuation = 1.0 / (light.k2 * dist * dist + light.k1 * dist + light.k0);
+	float attenuation = 1.0 / (light.k2 * dist * dist + light.k1 * dist + light.kc);
 
-	//1 è®¡ç®—diffuse
+	//1 ¼ÆËãdiffuse
 	vec3 diffuseColor = calculateDiffuse(light.color,objectColor, lightDir,normal);
 
-	//2 è®¡ç®—specular
+	//2 ¼ÆËãspecular
 	vec3 specularColor = calculateSpecular(light.color, lightDir,normal, viewDir,light.specularIntensity); 
 
 	return (diffuseColor + specularColor)*attenuation;
@@ -132,25 +127,18 @@ void main()
 {
 	vec3 result = vec3(0.0,0.0,0.0);
 
-	//è®¡ç®—å…‰ç…§çš„é€šç”¨æ•°æ®
-	vec3 objectColor  = texture(sampler, uv).xyz;
+	//¼ÆËã¹âÕÕµÄÍ¨ÓÃÊı¾İ
 	vec3 normalN = normalize(normal);
-	vec3 lightDirN = normalize(worldPosition - spotLight.position);
 	vec3 viewDir = normalize(worldPosition - cameraPosition);
-	vec3 targetDirN = normalize(spotLight.targetDirection);
 
-	result += calculateSpotLight(spotLight, normalN, viewDir);
 	result += calculateDirectionalLight(directionalLight,normalN, viewDir);
 
-	for(int i = 0;i < POINT_LIGHT_NUM;i++){
-		result += calculatePointLight(pointLights[i],normalN, viewDir);
-	}
-
-	//ç¯å¢ƒå…‰è®¡ç®—
+	//»·¾³¹â¼ÆËã
+	vec3 objectColor  = texture(sampler, uv).xyz;
 	vec3 ambientColor = objectColor * ambientColor;
-
 
 	vec3 finalColor = result + ambientColor;
 
 	FragColor = vec4(finalColor, 1.0);
+
 }
